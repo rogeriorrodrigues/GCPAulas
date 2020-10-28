@@ -1,0 +1,20 @@
+/**
+ * Responds to any HTTP request.
+ *
+ * @param {!express:Request} req HTTP request context.
+ * @param {!express:Response} res HTTP response context.
+ */
+exports.consultaCEP = (req, res) => {
+  let cep = req.query.cep || req.body.cep || 'CEP Não Informado';
+  
+ const buscaCep = require("busca-cep")
+  buscaCep(cep, {sync: false, timeout: 1000})
+  .then(endereco => {
+    res.status(200).send(endereco);
+  })
+  .catch(erro => {
+    console.log(`Erro: statusCode ${erro.statusCode} e mensagem ${erro.message}`);
+    res.status(200).send('Erro de Execucao');
+  });
+
+};
